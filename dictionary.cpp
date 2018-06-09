@@ -1,11 +1,10 @@
 #include <string>
 #include <unistd.h>
-#include <sys/types.h>
 #include <pwd.h>
 #include <fstream>
 #include <iterator>
-#include <iostream>
 #include <set>
+#include <stdexcept>
 #include "dictionary.h"
 
 using namespace std;
@@ -22,10 +21,7 @@ bool populate_dictionary(set<string> &dict, int argc, char *argv[]) {
     populate_dictionary_from_file(dict, getenv("HOME"));
   }
 
-  if (dict.size() == 0) {
-    cout << NO_DICTIONARY_ERROR << endl;
-    return false;
-  }
+  if (dict.size() == 0) {throw runtime_error(NO_DICTIONARY_ERROR);}
 
   return true;
 }

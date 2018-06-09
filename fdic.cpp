@@ -8,7 +8,12 @@ using namespace std;
 int main(int argc, char *argv[]) {
   set<string> dict;
 
-  if (!populate_dictionary(dict, argc, argv)) {return 1;}
+  try {
+    populate_dictionary(dict, argc, argv);
+  } catch (const exception &e) {
+    cout << e.what() << endl;
+    return 1;
+  }
 
   for (string word; getline(cin, word);) {
     if (dict.find(word) == dict.end()) {continue;}
