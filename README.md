@@ -30,3 +30,29 @@ For example:
 ``` bash
 g++ -Wall -o fdic fdic.cpp dictionary.cpp
 ```
+
+### AUR
+
+Download [the AUR snapshot](https://aur.archlinux.org/cgit/aur.git/snapshot/fdic.tar.gz) then extract with:
+
+``` bash
+tar xzf fdic[tab]
+```
+
+Then build/install with:
+
+```bash
+makepkg
+pacman -U fdic[tab]
+```
+
+Optionally, remove current directory.
+
+If you've cloned the git repo instead of downloading the snapshot, you'll have to bring in the submodule:
+
+``` bash
+git submodule init
+git submodule update
+```
+
+Then `cd AUR` and run the above `makepkg` and `pacman` commands from there.
