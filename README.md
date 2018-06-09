@@ -2,25 +2,31 @@
 
 ### Overview
 
-FDIC will read STDIN and output space delimited words to stdout if they are contained in ~/.config/fdic/dict.txt
+FDIC will read STDIN and output newline delimited words to stdout if they are contained in ~/.config/fdic/dict.txt
 
-Basic punctuation should be filtered from the input so that "The car is red." will output all 4 words. Otherwise, "red." is not going to be output because the word red is not space delimited.
+Basic punctuation should be filtered from the input if they are not in the dictionary.
 
-Punctuation removal can be achieved by piping to tr -d [:punct:]
+Punctuation removal from the input can be achieved by piping to tr -d [:punct:]
+
+Unprintable characters can be removed by piping to `tr -d -c [:print:]`
+
+Spaces can be converted to newlines with `tr -s " " "\n"`
 
 For example:
 
 ``` bash
 > echo "The car ZZZ999 is red." |fdic
-The car is>
+>
 ``` bash
 
 ``` bash
-> echo "The car ZZZ999 is red." |tr -d [:punct:] |fdic
-The car is red>
+> echo "the car ZZZ999 is red." |tr -d [:punct:] |tr -s " " "\n" |fdic
+the
+car
+is
+red
+>
 ``` bash
-
-If the input has new line or other unprintable characters, you may want them converted to spaces via `tr -s -c [:print:] " "`
 
 ### Compilation
 
