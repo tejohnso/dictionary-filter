@@ -1,4 +1,0 @@
-cat
-dog
-mouse
-the car is red.
