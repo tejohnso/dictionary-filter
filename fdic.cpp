@@ -1,19 +1,24 @@
 #include <string>
+#include <fstream>
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-#include <vector>
+#include <set>
+
+using namespace std;
 
 int main() {
-  std::vector<std::string> dict {"dog", "cat", "car"};
-  std::string firstWord;
+  set<string> dict;
+  string firstWord;
 
-  getline(std::cin, firstWord, ' ');
-  std::cout << firstWord;
+  fstream file("/home/tyler/.config/fdic/dict.txt");
+  copy(istream_iterator<string>(file), istream_iterator<string>(), inserter(dict, dict.end()));
 
-  for (std::string word; std::getline(std::cin, word, ' ');) {
-    std::cout << ' ' << word;
+  getline(cin, firstWord, ' ');
+  if (dict.find(firstWord) != dict.end()) {cout << firstWord;}
+
+  for (string word; getline(cin, word, ' ');) {
+    if (dict.find(word) == dict.end()) {continue;}
+    cout << ' ' << word;
   }
-
-  std::copy(dict.begin(), dict.end(), std::ostream_iterator<std::string>(std::cout, " "));
 }
