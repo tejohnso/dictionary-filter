@@ -28,5 +28,5 @@ cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic car do
 ### Compilation
 
 ``` bash
-g++ -Wall -o fdic fdic.cpp 
+g++ -Wall -o fdic fdic.cpp dictionary.cpp
 ```
