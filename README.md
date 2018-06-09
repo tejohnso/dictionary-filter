@@ -22,7 +22,7 @@ For example:
 ```
 
 ``` bash
-cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic car dog cat
+> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic car dog cat
 ```
 
 ### Compilation
