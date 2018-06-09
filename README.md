@@ -2,7 +2,10 @@
 
 ### Overview
 
-FDIC will read STDIN and output newline delimited words to stdout if they are contained in ~/.config/fdic/dict.txt
+FDIC will read STDIN and output newline delimited words to stdout if
+they are contained in a dictionary file at *~/.config/fdic/dict.txt*
+
+Alternatively, the dictionary can be specified on the command line `./fdic word1 word2 word3`
 
 Basic punctuation should be filtered from the input if they are not in the dictionary.
 
@@ -16,6 +19,10 @@ For example:
 
 ``` bash
 > cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic
+```
+
+``` bash
+cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic car dog cat
 ```
 
 ### Compilation
