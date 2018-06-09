@@ -8,25 +8,15 @@ Basic punctuation should be filtered from the input if they are not in the dicti
 
 Punctuation removal from the input can be achieved by piping to tr -d [:punct:]
 
-Unprintable characters can be removed by piping to `tr -d -c [:print:]`
+Unprintable characters can be converted to newlines by piping to `tr -s -c [:print:] "\n"`
 
 Spaces can be converted to newlines with `tr -s " " "\n"`
 
 For example:
 
 ``` bash
-> echo "The car ZZZ999 is red." |fdic
->
-``` bash
-
-``` bash
-> echo "the car ZZZ999 is red." |tr -d [:punct:] |tr -s " " "\n" |fdic
-the
-car
-is
-red
->
-``` bash
+> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic
+```
 
 ### Compilation
 
