@@ -5,6 +5,7 @@
 #include <vector>
 
 int main() {
+  std::vector<std::string> dict {"dog", "cat", "car"};
   std::string firstWord;
 
   getline(std::cin, firstWord, ' ');
@@ -13,4 +14,6 @@ int main() {
   for (std::string word; std::getline(std::cin, word, ' ');) {
     std::cout << ' ' << word;
   }
+
+  std::copy(dict.begin(), dict.end(), std::ostream_iterator<std::string>(std::cout, " "));
 }
