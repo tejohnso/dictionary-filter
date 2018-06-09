@@ -24,6 +24,10 @@ int main(int argc, char *argv[]) {
 
     fstream file(filePath.append(homedir).append("/.config/fdic/dict.txt"));
     copy(istream_iterator<string>(file), istream_iterator<string>(), inserter(dict, dict.end()));
+    if (dict.size() == 0) {
+      cout << "No dictionary found in $HOME/.config/fdic/dict.txt and no words provided as command line arguments." << endl;
+      return 1;
+    }
   }
 
   for (string word; getline(cin, word);) {
