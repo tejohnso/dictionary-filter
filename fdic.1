@@ -1,0 +1,45 @@
+.TH fdic 1 " " "fdic-VERSION"
+
+.SH NAME
+fdic - dictionary filter for stdin
+
+.SH SYNOPSIS
+fdic [wordlist]
+
+.SH DESCRIPTION
+FDIC will read STDIN and output newline delimited words to stdout if they are contained in a dictionary file.
+
+Alternatively, the dictionary can be specified on the command line as a space separated wordlist.
+
+Basic punctuation should be filtered from the input if they are not in the dictionary since fdic does not assume any punctuation removed. 
+
+.SH EXAMPLES
+Punctuation removal from the input can be achieved by piping to tr as in
+.I tr -d [:punct:]
+.
+
+Unprintable characters can be converted to newlines by piping to
+.I tr -s -c [:print:] \(dq\en\(dq
+
+Spaces can be converted to newlines with
+.I tr -s \(dq \(dq \(dq\en\(dq
+
+Using tr, we can see how often the computer things about pets with:
+
+     cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |fdic bunny dog cat
+
+Or, with a dicitionary configured, we can omit the wordlist from the command line:
+
+     cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |fdic
+
+.SH FILES
+~/.config/fdic/dict.txt should contain a list of valid words separated by newlines.
+
+.SH BUGS
+https://github.com/tejohnso/dictionary-filter/issues
+
+.SH AUTHOR
+https://github.com/tejohnso
+
+.SH SEE ALSO
+tr(1) aspell(1) cut(1) stdin(3)
