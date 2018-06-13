@@ -1,0 +1,24 @@
+name: fdic
+version: 'VERSION'
+summary: Dictionary filter for STDIN
+description: Dictionary filter for STDIN
+grade: stable
+confinement: strict
+
+apps:
+  fdic:
+    command: bin/fdic
+
+parts:
+  fdic:
+    source: https://github.com/tejohnso/dictionary-filter/archive/VERSION.tar.gz
+    build-packages:
+      - g++
+    plugin: nil
+    override-build: |
+      g++ -std=c++17 -Wall -o fdic fdic.cpp dictionary.cpp
+      install -D fdic $SNAPCRAFT_PART_INSTALL/bin/fdic
+    stage:
+      - bin/fdic
+    prime:
+      - bin/dic

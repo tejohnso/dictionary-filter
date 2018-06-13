@@ -1,0 +1,50 @@
+defaults: &defaults
+  working_directory: ~/workspace
+  docker:
+    - image: snapcore/snapcraft
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Build snap
+          command: snapcraft
+
+      - persist_to_workspace:
+          root: ~/workspace
+          paths: ['*.snap']
+
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/workspace
+
+      - run:
+          name: Load credentials
+          command: |
+            echo $UBUNTU_ONE_CRED |base64 -d >credentials
+
+      - run:
+          name: Authenticate snapcraft
+          command: snapcraft login --with credentials
+
+      - run:
+          name: Push/release snap
+          command: snapcraft push *.snap --release stable
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+      - release:
+          requires: [build]
+          filters:
+            branches:
+              only: testing/snap

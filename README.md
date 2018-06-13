@@ -28,7 +28,7 @@ For example:
 ### Compilation
 
 ``` bash
-g++ -Wall -o fdic fdic.cpp dictionary.cpp
+g++ -std=c++17 -Wall -o fdic fdic.cpp dictionary.cpp
 ```
 
 ### AUR
