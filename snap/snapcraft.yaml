@@ -1,5 +1,5 @@
 name: fdic
-version: 'VERSION'
+version: '1.0.1'
 summary: Dictionary filter for STDIN
 description: Dictionary filter for STDIN
 grade: stable
@@ -11,7 +11,7 @@ apps:
 
 parts:
   fdic:
-    source: https://github.com/tejohnso/dictionary-filter/archive/VERSION.tar.gz
+    source: https://github.com/tejohnso/dictionary-filter/archive/1.0.1.tar.gz
     build-packages:
       - g++
     plugin: nil
@@ -21,4 +21,4 @@ parts:
     stage:
       - bin/fdic
     prime:
-      - bin/dic
+      - bin/fdic
