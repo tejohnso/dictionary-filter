@@ -18,7 +18,10 @@ parts:
     override-build: |
       g++ -std=c++17 -Wall -o fdic fdic.cpp dictionary.cpp
       install -D fdic $SNAPCRAFT_PART_INSTALL/bin/fdic
+      install -Dm644 fdic.1 $SNAPCRAFT_PART_INSTALL/man/man1/fdic.1
     stage:
       - bin/fdic
+      - man/man1/fdic.1
     prime:
       - bin/fdic
+      - man/man1/fdic.1
