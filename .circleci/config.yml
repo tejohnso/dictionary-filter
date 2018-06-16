@@ -10,12 +10,26 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Verify required tags and changelog update
+          command: |
+            git tag --contains |grep [0-9]\\.[0-9]\\.[0-9]
+            git tag --contains |grep edge || git tag --contains |grep stable
+            git diff HEAD^1 HEAD --stat --name-only |grep ^CHANGELOG.md$
+
+      - run:
+          name: Set version
+          command: git tag --contains |grep [0-9]\\.[0-9]\\.[0-9] |tr -d "\n" > VERSION
+
+      - run:
           name: Build snap
-          command: snapcraft
+          command: |
+            echo "Building version $(cat VERSION)"
+            sed -i "s/VERSION/$(cat VERSION)/g" snap/snapcraft.yaml
+            snapcraft
 
       - persist_to_workspace:
           root: ~/workspace
-          paths: ['*.snap']
+          paths: ['*.snap', 'VERSION']
 
   release:
     <<: *defaults
@@ -35,16 +49,26 @@ jobs:
           command: snapcraft login --with credentials
 
       - run:
+          name: Create github release
+          command: |
+            curl -vv -H "content-type: application/json" --data-binary '{"tag_name":"$(cat VERSION)"}' -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases
+
+      - run:
           name: Push/release snap
-          command: snapcraft push *.snap --release stable
+          command: |
+            set +e
+            git tag --contains |grep edge && snapcraft push *.snap --release edge
+            git tag --contains |grep stable && snapcraft push *.snap --release stable
 
 workflows:
   version: 2
-  commit:
+  workflow:
     jobs:
-      - build
-      - release:
-          requires: [build]
+      - build:
           filters:
             branches:
-              only: testing/snap
+              ignore: /.*/
+            tags:
+              only: /.*/
+      - release:
+          requires: [build]
