@@ -1,12 +1,9 @@
-defaults: &defaults
-  working_directory: ~/workspace
-  docker:
-    - image: snapcore/snapcraft
-
 version: 2
 jobs:
   build:
-    <<: *defaults
+    working_directory: ~/workspace
+    docker:
+      - image: snapcore/snapcraft
     steps:
       - checkout
       - run:
@@ -31,8 +28,10 @@ jobs:
           root: ~/workspace
           paths: ['*.snap', 'VERSION']
 
-  release:
-    <<: *defaults
+  release_snap:
+    working_directory: ~/workspace
+    docker:
+      - image: snapcore/snapcraft
     steps:
       - checkout
 
@@ -49,23 +48,45 @@ jobs:
           command: snapcraft login --with credentials
 
       - run:
-          name: Create github release
-          command: |
-            curl -vv -H "content-type: application/json" --data-binary '{"tag_name":"$(cat VERSION)"}' -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases
-
-      - run:
           name: Push/release snap
           command: |
-            set +e
-            git tag --contains |grep edge && snapcraft push *.snap --release edge
-            git tag --contains |grep stable && snapcraft push *.snap --release stable
+            if git tag --contains |grep edge; then snapcraft push *.snap --release edge; fi
+            if git tag --contains |grep stable; then snapcraft push *.snap --release stable; fi
+
+  release_github:
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/buildpack-deps
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/workspace
+
+      - run:
+          name: Create github release
+          command: |
+            curl -vv -H "content-type: application/json" --data-binary "{\"tag_name\":\"$(cat VERSION)\"}" -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases 2>&1 |grep "201 Created"
+
+  release_aur:
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/buildpack-deps
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/workspace
 
       - run:
           name: Update AUR
           command: |
             cd /tmp
+            echo -n $AUR_FINGERPRINT |base64 -d >> ~/.ssh/known_hosts
             git clone ssh://aur@aur.archlinux.org/fdic.git
             cd fdic
+            git config user.name "$AUR_USER_NAME"
+            git config user.email "$AUR_USER_EMAIL"
             sed -i "s/[0-9]\.[0-9]\.[0-9]/$(cat ~/workspace/VERSION)/g" .SRCINFO
             sed -i "s/pkgver=.*/pkgver=$(cat ~/workspace/VERSION)/" PKGBUILD
             git add .
@@ -82,5 +103,21 @@ workflows:
               ignore: /.*/
             tags:
               only: /stage|edge/
-      - release:
-          requires: [build]
+      - release_snap:
+          filters:
+            tags:
+              only: /stage|edge/
+          requires:
+            - build
+      - release_aur:
+          filters:
+            tags:
+              only: /stage|edge/
+          requires:
+            - build
+      - release_github:
+          filters:
+            tags:
+              only: /stage|edge/
+          requires:
+            - build
