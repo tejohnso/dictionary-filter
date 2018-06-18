@@ -16,7 +16,7 @@ parts:
       - g++
     plugin: nil
     override-build: |
-      g++ -std=c++17 -Wall -o fdic fdic.cpp dictionary.cpp
+      g++ -O3 -std=c++17 -Wall -o fdic fdic.cpp dictionary.cpp
       install -D fdic $SNAPCRAFT_PART_INSTALL/bin/fdic
       install -Dm644 fdic.1 $SNAPCRAFT_PART_INSTALL/man/man1/fdic.1
     stage:
