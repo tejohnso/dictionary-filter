@@ -42,17 +42,9 @@ tar xzf fdic[tab]
 Then build/install with:
 
 ```bash
+cd fdic
 makepkg
 pacman -U fdic[tab]
+cd ..
+rm -rf fdic
 ```
-
-Optionally, remove current directory.
-
-If you've cloned the git repo instead of downloading the snapshot, you'll have to bring in the submodule:
-
-``` bash
-git submodule init
-git submodule update
-```
-
-Then `cd AUR` and run the above `makepkg` and `pacman` commands from there.
