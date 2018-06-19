@@ -26,15 +26,13 @@ jobs:
 
       - persist_to_workspace:
           root: ~/workspace
-          paths: ['*.snap', 'VERSION']
+          paths: ['*.snap', 'VERSION', 'snap/snapcraft.yaml']
 
   release_snap:
     working_directory: ~/workspace
     docker:
       - image: snapcore/snapcraft
     steps:
-      - checkout
-
       - attach_workspace:
           at: ~/workspace
 
