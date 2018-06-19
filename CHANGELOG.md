@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Allow min/max wordlength cli options
 - Check default ubuntu dict paths
 
+## [1.0.5] - 2018-06-19
+### Added
+- Improved release process
+
 ## [1.0.4] - 2018-06-18
 ### Added
 - Include AUR publishing

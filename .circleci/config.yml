@@ -33,6 +33,7 @@ jobs:
     docker:
       - image: snapcore/snapcraft
     steps:
+      - checkout
       - attach_workspace:
           at: ~/workspace
 
@@ -51,20 +52,24 @@ jobs:
             if git tag --contains |grep edge; then snapcraft push *.snap --release edge; fi
             if git tag --contains |grep stable; then snapcraft push *.snap --release stable; fi
 
+      - run:
+          name: Confirm release
+          command: |
+            snapcraft list-revisions fdic |grep $(cat VERSION)
+
   release_github:
     working_directory: ~/workspace
     docker:
       - image: circleci/buildpack-deps
     steps:
       - checkout
-
       - attach_workspace:
           at: ~/workspace
 
       - run:
           name: Create github release
           command: |
-            curl -vv -H "content-type: application/json" --data-binary "{\"tag_name\":\"$(cat VERSION)\"}" -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases 2>&1 |grep "201 Created"
+            curl -vv -H "content-type: application/json" --data-binary "{\"body\":\"See [CHANGELOG](https://github.com/tejohnso/dictionary-filter/blob/master/CHANGELOG.md) for details\",\"tag_name\":\"$(cat VERSION)\"}" -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases 2>&1 |grep "201 Created"
 
   release_aur:
     working_directory: ~/workspace
@@ -72,7 +77,6 @@ jobs:
       - image: circleci/buildpack-deps
     steps:
       - checkout
-
       - attach_workspace:
           at: ~/workspace
 
