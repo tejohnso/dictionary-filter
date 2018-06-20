@@ -4,6 +4,7 @@
 
 FDIC will read STDIN and output newline delimited words to stdout if
 they are contained in a dictionary file at *~/.config/fdic/dict.txt*
+or *~/snap/fdic/common/dict.txt*
 
 Alternatively, the dictionary can be specified on the command line `./fdic word1 word2 word3`
 

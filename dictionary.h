@@ -5,6 +5,6 @@
 
 using namespace std;
 
-bool populate_dictionary(set<string>&, int, char *[]);
+void populate_dictionary(set<string>&, int, char *[]);
 
 #endif
