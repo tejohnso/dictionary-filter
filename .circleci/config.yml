@@ -7,11 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Verify required tags and changelog update
+          name: Verify required tags and changelog update for non branch channels
           command: |
             git tag --contains |grep [0-9]\\.[0-9]\\.[0-9]
             git tag --contains |grep edge || git tag --contains |grep stable
-            git diff HEAD^1 HEAD --stat --name-only |grep ^CHANGELOG.md$
+            if git tag --contains |grep ^edge$ || git tag --contains |grep ^stable$; then git diff HEAD^1 HEAD --stat --name-only |grep ^CHANGELOG.md$; fi
 
       - run:
           name: Set version
@@ -49,8 +49,8 @@ jobs:
       - run:
           name: Push/release snap
           command: |
-            if git tag --contains |grep edge; then snapcraft push *.snap --release edge; fi
-            if git tag --contains |grep stable; then snapcraft push *.snap --release stable; fi
+            if git tag --contains |grep edge; then snapcraft push *.snap --release $(git tag --contains |grep edge |tr -d "\n" |tr "+" "/"); fi
+            if git tag --contains |grep stable; then snapcraft push *.snap --release $(git tag --contains |grep edge |tr -d "\n" |tr "+" "/"); fi
 
       - run:
           name: Confirm release
@@ -106,22 +106,22 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /stage|edge/
+              only: /stable|edge.*/
       - release_snap:
           filters:
             tags:
-              only: /stage|edge/
+              only: /stable|edge.*/
           requires:
             - build
       - release_aur:
           filters:
             tags:
-              only: /stage|edge/
+              only: /stable|edge/
           requires:
             - build
       - release_github:
           filters:
             tags:
-              only: /stage|edge/
+              only: /stable|edge/
           requires:
             - build
