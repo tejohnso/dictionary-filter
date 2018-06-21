@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 - Use unordered set
 - Allow min/max wordlength cli options
-- Check default ubuntu dict paths
 
 ## [1.0.8] - 2018-06-19
 ### Added
