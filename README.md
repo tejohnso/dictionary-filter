@@ -19,33 +19,34 @@ Spaces can be converted to newlines with `tr -s " " "\n"`
 For example:
 
 ``` bash
-> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic
+> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |fdic
 ```
 
 ``` bash
-> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |./fdic car dog cat
+> cat /dev/urandom |tr -s -c [:alpha:] "\n" |tr [:upper:] [:lower:] |fdic car dog cat
 ```
 
-### Compilation
+### Installation
+
+#### AUR
+
+Download [the AUR snapshot](https://aur.archlinux.org/cgit/aur.git/snapshot/fdic.tar.gz) then extract and build:
+
+``` bash
+curl -s "https://aur.archlinux.org/cgit/aur.git/snapshot/fdic.tar.gz" |tar xz --directory=/tmp
+cd /tmp/fdic
+makepkg
+sudo pacman -U fdic[tab]
+```
+
+#### SNAP
+
+``` bash
+sudo snap install fdic
+```
+
+### Compilation from source
 
 ``` bash
 g++ -std=c++17 -O3 -Wall -o fdic fdic.cpp dictionary.cpp
-```
-
-### AUR
-
-Download [the AUR snapshot](https://aur.archlinux.org/cgit/aur.git/snapshot/fdic.tar.gz) then extract with:
-
-``` bash
-tar xzf fdic[tab]
-```
-
-Then build/install with:
-
-```bash
-cd fdic
-makepkg
-pacman -U fdic[tab]
-cd ..
-rm -rf fdic
 ```
