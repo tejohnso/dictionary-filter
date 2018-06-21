@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Create github release
           command: |
-            curl -vv -H "content-type: application/json" --data-binary "{\"body\":\"See [CHANGELOG](https://github.com/tejohnso/dictionary-filter/blob/master/CHANGELOG.md) for details\",\"tag_name\":\"$(cat VERSION)\"}" -u tejohnso:$GITHUB_TOKEN https://api.github.com/repos/tejohnso/dictionary-filter/releases 2>&1 |grep "201 Created"
+            curl -vv -H "content-type: application/json" --data-binary "{\"body\":\"See [CHANGELOG](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/master/CHANGELOG.md) for details\",\"tag_name\":\"$(cat VERSION)\"}" -u $CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases 2>&1 |grep "201 Created"
 
   release_aur:
     working_directory: ~/workspace
