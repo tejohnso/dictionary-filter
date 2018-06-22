@@ -17,6 +17,6 @@ int main(int argc, char *argv[]) {
 
   for (string word; getline(cin, word);) {
     if (dict.find(word) == dict.end()) {continue;}
-    cout << word << '\n';
+    cout << word << endl;
   }
 }
